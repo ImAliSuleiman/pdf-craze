@@ -1,8 +1,11 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pdf_craze/routes/camera.dart';
 import 'package:pdf_craze/routes/pdf_camera.dart';
+import 'package:pdf_craze/routes/pdf_pick.dart';
 import 'package:pdf_craze/routes/pdf_url.dart';
 
 void main() {
@@ -36,6 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
   var _imagePath;
   var _url =
       'https://docs.conda.io/projects/conda/en/4.6.0/_downloads/52a95608c49671267e40c689e0bc00ca/conda-cheatsheet.pdf';
+  var _pickedFile;
 
   void _gotoCamera() {
     Navigator.of(context).push(
@@ -66,6 +70,14 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) {
         return PdfUrlPage(url: _url);
+      }),
+    );
+  }
+
+  _gotoPDFPick() {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) {
+        return PdfPickPage(file: _pickedFile);
       }),
     );
   }
@@ -105,10 +117,53 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _gotoCamera,
+        onPressed: _showActionSheet,
         tooltip: 'Add Document',
-        child: Icon(Icons.camera_alt),
+        child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  _showActionSheet() async {
+    showCupertinoModalPopup(
+        context: context,
+        builder: (context) {
+          return CupertinoActionSheet(
+            // title: Text('Title'),
+            message: Text('Choose method to add a document.'),
+            actions: <Widget>[
+              CupertinoActionSheetAction(
+                child: Text('Capture with camera'),
+                isDefaultAction: false,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _gotoCamera();
+                },
+              ),
+              CupertinoActionSheetAction(
+                child: Text(
+                  'Pick a file',
+                ),
+                isDefaultAction: false,
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  _pickedFile = null;
+                  _pickedFile = await FilePicker.getFile(
+                      type: FileType.custom, allowedExtensions: ['pdf']);
+                  if (_pickedFile != null) _gotoPDFPick();
+                },
+              ),
+            ],
+            cancelButton: CupertinoActionSheetAction(
+              child: Text(
+                'Cancel',
+              ),
+              isDestructiveAction: true,
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+          );
+        });
   }
 }
