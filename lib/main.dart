@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:pdf_craze/routes/camera.dart';
+import 'package:pdf_craze/routes/pdf.dart';
 
 void main() {
   runApp(MyApp());
@@ -48,16 +49,41 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  _gotoPDF() {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) {
+        return PDFPage(image: File(_imagePath));
+      }),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
+      body: SingleChildScrollView(
+        padding: EdgeInsets.only(top: 16, left: 16, right: 16),
         child: _imagePath == null
-            ? Text('No document to preview')
-            : Image.file(File(_imagePath)),
+            ? Center(child: Text('No document to preview'))
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Image.file(
+                    File(_imagePath),
+                    width: 80,
+                  ),
+                  Expanded(
+                    child: Container(),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.print, color: Colors.red),
+                    onPressed: () => _gotoPDF(),
+                  ),
+                  SizedBox(width: 16),
+                ],
+              ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _gotoCamera,

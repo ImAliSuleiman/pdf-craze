@@ -5,10 +5,10 @@ import 'package:path_provider/path_provider.dart';
 
 class CameraPage extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _CameraPageState createState() => _CameraPageState();
 }
 
-class _MyHomePageState extends State<CameraPage> {
+class _CameraPageState extends State<CameraPage> {
   List<CameraDescription> _cameras;
   CameraController _cameraController;
   Future<void> _initializeControllerFuture;
