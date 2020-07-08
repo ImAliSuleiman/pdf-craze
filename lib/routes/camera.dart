@@ -1,5 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 
 class CameraPage extends StatefulWidget {
   @override
@@ -57,7 +59,21 @@ class _MyHomePageState extends State<CameraPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () async {
+          try {
+            // Recheck cameras
+            await _initializeControllerFuture;
+
+            // Construct image path
+            final path = join(
+                (await getTemporaryDirectory()).path, '${DateTime.now()}.png');
+
+            // Try to capture
+            await _cameraController.takePicture(path);
+          } on Exception catch (e) {
+            print('Failed to capture: ' + e.toString());
+          }
+        },
         tooltip: 'Take Picture',
         child: Icon(Icons.camera),
       ), // This trailing comma makes auto-formatting nicer for build methods.
