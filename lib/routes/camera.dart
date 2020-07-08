@@ -16,18 +16,20 @@ class _MyHomePageState extends State<CameraPage> {
     // TODO: implement initState
     super.initState();
 
-    _getCameras().then((cameras) {
-      _cameras = cameras;
-      print('Cameras: ' + _cameras.length.toString());
+//    _getCameras().then((cameras) {
+////      _cameras = cameras;
+////      print('Cameras: ' + _cameras.length.toString());
+////
+////      _cameraController = CameraController(
+////        _cameras.first,
+////        ResolutionPreset.medium,
+////        enableAudio: true,
+////      );
+////
+////      _initializeControllerFuture = _cameraController.initialize();
+////    });
 
-      _cameraController = CameraController(
-        _cameras.first,
-        ResolutionPreset.medium,
-        enableAudio: true,
-      );
-
-      _initializeControllerFuture = _cameraController.initialize();
-    });
+    _initializeControllerFuture = _initializeCameras();
   }
 
   @override
@@ -45,7 +47,7 @@ class _MyHomePageState extends State<CameraPage> {
               // If the Future is complete, display the camera preview.
               return CameraPreview(_cameraController);
             } else if (snapshot.connectionState == ConnectionState.none) {
-              // Otherwise, display a loading indicator.
+              // On error
               return Text('Could not initialize camera!');
             } else {
               // Otherwise, display a loading indicator.
@@ -73,6 +75,19 @@ class _MyHomePageState extends State<CameraPage> {
 
     // Get a specific camera from the list of available cameras.
     // final firstCamera = cameras.first;
+  }
+
+  _initializeCameras() async {
+    _cameras = await _getCameras();
+    print('Cameras: ' + _cameras.length.toString());
+
+    _cameraController = CameraController(
+      _cameras.first,
+      ResolutionPreset.high,
+      enableAudio: true,
+    );
+
+    return _cameraController.initialize();
   }
 
   @override
