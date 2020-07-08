@@ -45,6 +45,8 @@ class _MyHomePageState extends State<MyHomePage> {
       if (imagePath != null)
         setState(() {
           _imagePath = imagePath;
+          var imageSize = File(_imagePath).lengthSync() / 1024 / 1024;
+          print('Image captured - ' + imageSize.toString() + ' MB');
         });
     });
   }
