@@ -7,16 +7,16 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
-class PDFPage extends StatefulWidget {
-  PDFPage({Key key, this.image}) : super(key: key);
+class PdfCameraPage extends StatefulWidget {
+  PdfCameraPage({Key key, this.image}) : super(key: key);
 
   final File image;
 
   @override
-  _PDFPageState createState() => _PDFPageState();
+  _PdfCameraPageState createState() => _PdfCameraPageState();
 }
 
-class _PDFPageState extends State<PDFPage> {
+class _PdfCameraPageState extends State<PdfCameraPage> {
   Future<void> _createPdfFuture;
   PdfDocument _pdfConversion;
   var _docPath;

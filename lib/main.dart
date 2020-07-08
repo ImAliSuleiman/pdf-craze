@@ -2,7 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:pdf_craze/routes/camera.dart';
-import 'package:pdf_craze/routes/pdf.dart';
+import 'package:pdf_craze/routes/pdf_camera.dart';
+import 'package:pdf_craze/routes/pdf_url.dart';
 
 void main() {
   runApp(MyApp());
@@ -33,6 +34,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   var _imagePath;
+  var _url =
+      'https://docs.conda.io/projects/conda/en/4.6.0/_downloads/52a95608c49671267e40c689e0bc00ca/conda-cheatsheet.pdf';
 
   void _gotoCamera() {
     Navigator.of(context).push(
@@ -51,10 +54,18 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  _gotoPDF() {
+  _gotoPDFCamera() {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) {
-        return PDFPage(image: File(_imagePath));
+        return PdfCameraPage(image: File(_imagePath));
+      }),
+    );
+  }
+
+  _gotoPDFUrl() {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) {
+        return PdfUrlPage(url: _url);
       }),
     );
   }
@@ -64,6 +75,12 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.link, color: Colors.white),
+            onPressed: () => _gotoPDFUrl(),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.only(top: 16, left: 16, right: 16),
@@ -81,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   IconButton(
                     icon: Icon(Icons.print, color: Colors.red),
-                    onPressed: () => _gotoPDF(),
+                    onPressed: () => _gotoPDFCamera(),
                   ),
                   SizedBox(width: 16),
                 ],
