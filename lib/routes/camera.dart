@@ -70,6 +70,7 @@ class _MyHomePageState extends State<CameraPage> {
 
             // Try to capture
             await _cameraController.takePicture(path);
+            Navigator.of(context).pop(path);
           } on Exception catch (e) {
             print('Failed to capture: ' + e.toString());
           }

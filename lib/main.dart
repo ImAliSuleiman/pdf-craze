@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:pdf_craze/routes/camera.dart';
 
@@ -29,12 +31,21 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  var _imagePath;
+
   void _gotoCamera() {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) {
         return CameraPage();
       }),
-    );
+    ).then((imagePath) {
+      print('Returned path: ' + imagePath.toString());
+
+      if (imagePath != null)
+        setState(() {
+          _imagePath = imagePath;
+        });
+    });
   }
 
   @override
@@ -44,7 +55,9 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Text('No document to preview'),
+        child: _imagePath == null
+            ? Text('No document to preview')
+            : Image.file(File(_imagePath)),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _gotoCamera,
