@@ -42,6 +42,6 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>NSCameraUsageDescription</key>
-    <string>To take pictures of documents to upload.</string>
+    <string>To take pictures.</string>
 </dict>
 </plist>
